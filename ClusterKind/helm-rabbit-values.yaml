@@ -1,0 +1,10 @@
+# To install:
+# helm install stable/rabbitmq-ha --name my-rabbit --namespace rabbit -f rabbit-values.yaml
+
+replicaCount: 1
+
+service:
+  type: NodePort
+
+rabbitmqUsername: guest
+rabbitmqPassword: guest

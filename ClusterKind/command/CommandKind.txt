@@ -1,0 +1,31 @@
+
+- Create cluster
+kind create cluster --config cluster.yaml --name clustername
+
+- Delete cluster
+kind delete cluster --name clustername
+
+- Export conf cluster
+export KUBECONFIG="$(kind get kubeconfig-path --name="clustername")"
+kubectl cluster-info
+
+- Load image on cache cluster
+kind load docker-image <image>:<tag> --name clustername
+
+
+- Helm
+helm
+kubectl -n kube-system create serviceaccount tiller
+kubectl create clusterrolebinding tiller   --clusterrole=cluster-admin   --serviceaccount=kube-system:tiller
+helm init --service-account tiller
+helm version
+
+
+- Rabbit helm install
+helm install stable/rabbitmq-ha --name drone-rabbit --namespace rabbit -f rabbit-values.yaml  (file con conf)
+kubectl get deployments,pods,services --namespace rabbit
+kubectl patch service drone-rabbit-rabbitmq-ha --namespace=rabbit --type='json' --patch='[{"op": "replace", "path": "/spec/ports/0/nodePort", "value":31000}]'
+
+- for delete
+helm delete drone-rabbit
+helm del --purge drone-rabbit

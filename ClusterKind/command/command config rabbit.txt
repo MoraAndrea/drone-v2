@@ -1,0 +1,23 @@
+create cluster
+find docker ip: 
+	docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' multinode2-control-plane	(name = multinode2-control-plane)
+
+enter in bash pod:
+	kubectl exec -it drone-rabbit-rabbitmq-ha-0 /bin/bash --namespace rabbit
+
+config rabbit for upstream federation:
+
+	peers = [["rabbit1", "10.0.0.1"], ["rabbit2", "10.0.0.2"]] --> mettere ip con cui federarsi
+	
+	rabbitmqctl add_user _username _password  --> new user
+
+	rabbitmqctl set_user_tags _username administrator	--> set user tag
+
+	rabbitmqctl set_permissions -p / _username ".*" ".*" ".*"   --> set permission
+
+	federation: 
+		rabbitmqctl set_parameter federation-upstream peer[i] '{"uri":"amqp://_username:_password@peer[i]"}'
+
+		rabbitmqctl set_parameter federation-upstream-set _set '["upstream":"str(peer[0])"},"upstream":"str(peer[1])"},]'
+
+		rabbitmqctl set_policy --apply-to exchanges _policy _exchange '{"federation-upstream-set":"_set"}'

@@ -1,0 +1,16 @@
+new Pod running ubuntu Linux for test:
+    kubectl run my-test --rm -i --tty --image ubuntu -- bash
+
+    - install curl and then we can test accessing myservice
+        apt-get update && apt-get install curl
+        curl myservice     [ only title: | grep title  ]
+
+
+
+
+
+The connection to the server localhost:8080 was refused - did you specify the right host or port?
+solution:
+    sudo cp /etc/kubernetes/admin.conf $HOME/
+    sudo chown $(id -u):$(id -g) $HOME/admin.conf
+    export KUBECONFIG=$HOME/admin.conf
