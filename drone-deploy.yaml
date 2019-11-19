@@ -17,5 +17,5 @@ spec:
           image: drone-agent:first
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh","-c"]
-          args: ["python3 ./main.py cluster1 -p -l DEBUG -d config/config.ini"]
+          args: ["python3 ./main.py {NAME} -p -l DEBUG -d config/config.ini"]
       restartPolicy: Always # possible values Always, OnFailure, and Never. The default value is Always.
